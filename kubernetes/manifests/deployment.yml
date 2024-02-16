@@ -3,7 +3,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: py-map-api
+  labels:
+    app: py-map-api
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: py-map-api
