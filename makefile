@@ -1,5 +1,5 @@
 # Define a variable for the image name and tag
-IMAGE_NAME = py_map_api
+IMAGE_NAME = py-map-api
 IMAGE_TAG = latest
 
 # Define the default target
