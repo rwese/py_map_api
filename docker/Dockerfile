@@ -1,4 +1,4 @@
-FROM python:3.8
+FROM --platform=$BUILDPLATFORM python:3.8
 
 # add app-user
 RUN useradd -ms /bin/bash app
