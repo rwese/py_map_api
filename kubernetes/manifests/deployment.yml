@@ -1,0 +1,29 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: py-map-api
+spec:
+  selector:
+    matchLabels:
+      app: py-map-api
+  template:
+    metadata:
+      labels:
+        app: py-map-api
+    spec:
+      containers:
+      - name: py-map-api
+        image: ghcr.io/rwese/py_map_api:main
+        ports:
+          - containerPort: 8000
+        readinessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: 8000
+          initialDelaySeconds: 30
+          periodSeconds: 30
