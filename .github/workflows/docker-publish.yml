@@ -103,5 +103,6 @@ jobs:
           masterBranchName: main
           valueFile: 'kubernetes/manifests/deployment.yml'
           propertyPath: 'spec.template.spec.containers[0].image'
+          token: ${{ secrets.IMAGE_UPDATER_ACTION_TOKEN }}
           value: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.build-and-push.outputs.digest }}
           commitChange: true
