@@ -99,6 +99,8 @@ jobs:
       - name: Update values.yaml
         uses: OpsVerseIO/image-updater-action@0.1.0
         with:
+          targetBranch: main
+          masterBranchName: main
           valueFile: 'kubernetes/manifests/deployment.yml'
           propertyPath: 'spec.template.spec.containers[0].image'
           value: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.build-and-push.outputs.digest }}
