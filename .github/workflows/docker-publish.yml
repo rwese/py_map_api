@@ -101,7 +101,7 @@ jobs:
         id: build-new-digest
         run: |
           NEW_DIGEST=$(echo "${{ steps.build-and-push.outputs.digest }}" | sed -e 's#sha256:#sha256-#')
-          echo "new-digest=$NEW_DIGEST" >> $GITHUB_STATE
+          echo "new-digest=$NEW_DIGEST" >> $GITHUB_OUTPUT
 
       - name: Update values.yaml
         uses: OpsVerseIO/image-updater-action@0.1.0
