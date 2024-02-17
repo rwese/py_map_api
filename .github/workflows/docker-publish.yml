@@ -87,7 +87,7 @@ jobs:
       # transparency data even for private images, pass --force to cosign below.
       # https://github.com/sigstore/cosign
       - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
+        if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
         env:
           # https://docs.github.com/en/actions/security-guides/security-hardening-for-github-actions#using-an-intermediate-environment-variable
           TAGS: ${{ steps.meta.outputs.tags }}
@@ -95,6 +95,13 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      - name: Push app image
+        if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+        id: build-new-digest
+        run: |
+          NEW_DIGEST=$(echo "${{ steps.build-and-push.outputs.digest }}" | sed -e 's#sha256:#sha256-#')
+          echo "::set-output name=new-digest::$NEW_DIGEST"
 
       - name: Update values.yaml
         uses: OpsVerseIO/image-updater-action@0.1.0
@@ -105,5 +112,5 @@ jobs:
           valueFile: 'kubernetes/manifests/deployment.yml'
           propertyPath: 'spec.template.spec.containers[0].image'
           token: ${{ secrets.IMAGE_UPDATER_ACTION_TOKEN }}
-          value: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.build-and-push.outputs.digest }}
+          value: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.build-new-digest.outputs.new-digest }}
           commitChange: true
