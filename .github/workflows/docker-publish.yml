@@ -108,6 +108,7 @@ jobs:
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
         with:
           targetBranch: main
+          branch: main
           masterBranchName: main
           valueFile: 'kubernetes/manifests/deployment.yml'
           propertyPath: 'spec.template.spec.containers[0].image'
