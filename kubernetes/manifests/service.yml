@@ -10,7 +10,7 @@ spec:
   selector:
     app: py-map-api
   ports:
-  - name: http
-    protocol: TCP
-    port: 80
-    targetPort: 8000
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
