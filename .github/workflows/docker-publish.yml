@@ -96,14 +96,14 @@ jobs:
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
-      - name: Push app image
+      - name: modify digest for image use
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
         id: build-new-digest
         run: |
           NEW_DIGEST=$(echo "${{ steps.build-and-push.outputs.digest }}" | sed -e 's#sha256:#sha256-#')
           echo "new-digest=$NEW_DIGEST" >> $GITHUB_OUTPUT
 
-      - name: Update values.yaml
+      - name: Dump image digest version
         uses: OpsVerseIO/image-updater-action@0.1.0
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
         with:
