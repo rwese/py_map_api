@@ -98,6 +98,7 @@ jobs:
 
       - name: Update values.yaml
         uses: OpsVerseIO/image-updater-action@0.1.0
+        if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
         with:
           targetBranch: main
           masterBranchName: main
