@@ -107,6 +107,7 @@ jobs:
         uses: OpsVerseIO/image-updater-action@0.1.0
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
         with:
+          message: '[skip ci] bump manifest image'
           targetBranch: main
           branch: main
           masterBranchName: main
