@@ -8,9 +8,9 @@ spec:
   issuerRef:
     name: letsencrypt-production
     kind: ClusterIssuer
-  commonName: "py-map-api.local.tld"
+  commonName: "py-map-api.cluster.local"
   dnsNames:
-    - "py-map-api.local.tld"
+    - "py-map-api.cluster.local"
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -22,10 +22,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - py-map-api.local.tld
+        - py-map-api.cluster.local
       secretName: py-map-api-tls
   rules:
-    - host: py-map-api.local.tld
+    - host: py-map-api.cluster.local
       http:
         paths:
           - path: /
@@ -35,4 +35,3 @@ spec:
                 name: py-map-api
                 port:
                   number: 80
-

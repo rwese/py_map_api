@@ -95,3 +95,15 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
+
+      - name: Update values.yaml
+        uses: OpsVerseIO/image-updater-action@0.1.0
+        if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
+        with:
+          targetBranch: main
+          masterBranchName: main
+          valueFile: 'kubernetes/manifests/deployment.yml'
+          propertyPath: 'spec.template.spec.containers[0].image'
+          token: ${{ secrets.IMAGE_UPDATER_ACTION_TOKEN }}
+          value: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.build-and-push.outputs.digest }}
+          commitChange: true

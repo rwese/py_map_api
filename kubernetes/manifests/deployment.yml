@@ -16,17 +16,17 @@ spec:
         app: py-map-api
     spec:
       containers:
-      - name: py-map-api
-        image: ghcr.io/rwese/py_map_api:main
-        ports:
-          - containerPort: 8000
-        readinessProbe:
-          tcpSocket:
-            port: 8000
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        livenessProbe:
-          tcpSocket:
-            port: 8000
-          initialDelaySeconds: 30
-          periodSeconds: 30
+        - name: py-map-api
+          image: ghcr.io/rwese/py_map_api:main
+          ports:
+            - containerPort: 8000
+          readinessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            tcpSocket:
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 30
