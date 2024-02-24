@@ -2,9 +2,19 @@
 IMAGE_NAME = py-map-api
 IMAGE_TAG = latest
 
+# Define the usage output
+.PHONY: help
+help:
+	@echo "Usage: make [target]"
+	@echo " "
+	@echo "Targets:"
+	@echo "build    Build the docker image"
+	@echo "run      Run the application"
+	@echo "clean    Remove the docker image"
+
 # Define the default target
 .PHONY: all
-all: build
+all: help
 
 # Define the build target
 .PHONY: docker-build
@@ -17,7 +27,7 @@ run:
 
 .PHONY: run
 run:
-	uvicorn --app-dir src main:app --host 0.0.0.0 --port 8000 --reload
+	uvicorn --app-dir src app.api:app --host 0.0.0.0 --port 8000 --reload
 
 # Define the clean target
 .PHONY: clean
