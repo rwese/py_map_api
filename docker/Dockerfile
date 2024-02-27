@@ -13,5 +13,6 @@ ENV PATH="${PATH}:/home/app/.local/bin"
 # Allow IPS for RFC1918 ranges
 ENV FORWARDED_ALLOW_IPS="10.*,172.16.*,192.168.*"
 
-CMD ["uvicorn", "--app-dir", "/app/src", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "/app/src/main.py"]
+
 EXPOSE 8000/TCP
