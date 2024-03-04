@@ -12,7 +12,7 @@ async def read_root():
     return {"message": "Hello, World"}
 
 @app.get("/pos", response_model=PositionsResponse)
-async def get_pos(poisRequest: PositionsRequest = Depends()):
+def get_pos(poisRequest: PositionsRequest = Depends()):
     """
     Get positions by names, comma separated and return a json of found location names, longitude, and latitude.
     """

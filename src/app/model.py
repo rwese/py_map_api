@@ -1,3 +1,4 @@
+from typing import Dict
 from pydantic import BaseModel, Field
 from typing_extensions import Annotated
 
@@ -10,4 +11,4 @@ class PositionData(BaseModel):
     lat: str = Field(..., example="51.5074456")
 
 class PositionsResponse(BaseModel):
-    __root__: dict[str, PositionData]
+    data: Dict[str, PositionData] = Field(..., alias="__root__")
