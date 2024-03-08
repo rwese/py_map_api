@@ -23,7 +23,10 @@ def get_pos_by_names(names: list):
     for name in names:
         query = name
         response = client().geocode(query)
-        responses[name] = response.raw
+        if response:
+            responses[name] = response.raw
+        else:
+            continue
 
     return responses
 

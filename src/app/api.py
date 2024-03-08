@@ -20,13 +20,24 @@ def get_pos(poisRequest: PositionsRequest = Depends()):
     pois = [poi.strip() for poi in pois]
     results = get_pos_by_names(pois)
     responses = {}
-    for name in results:
-        result = results[name]
-        responses[name] = {
-            "display_name": result['display_name'],
-            "lon": result['lon'],
-            "lat": result['lat']
-        }
+    for name in pois:
+        result = results.get(name)
+        if result:
+            responses[name] = {
+                "display_name": result['display_name'],
+                "lon": result['lon'],
+                "lat": result['lat']
+            }
+        else:
+            responses[name] = {
+                "display_name": "Not found",
+                "lon": '0',
+                "lat": '0'
+            }
 
-    return responses
+
+    return {
+        "positions": responses
+    }
+
 
