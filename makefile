@@ -20,12 +20,12 @@ help:
 	@echo "Usage: make [target]"
 	@echo " "
 	@echo "Targets:"
-	@echo "setup    Setup the virtual environment"
-	@echo "activate Activate the virtual environment"
+	@echo "setup        Setup the virtual environment"
+	@echo "activate     Activate the virtual environment"
 	@echo "docker-build Build the Docker image"
-	@echo "docker-run    Run the Docker image"
-	@echo "run      Run the application in the virtual environment"
-	@echo "clean    Remove the Docker image"
+	@echo "docker-run   Run the Docker image"
+	@echo "run          Run the application in the virtual environment"
+	@echo "clean        Remove the Docker image"
 
 # Define the default target
 .PHONY: all

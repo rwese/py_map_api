@@ -26,7 +26,7 @@ app = create_app()
 
 
 @app.get("/hello")
-async def read_root():
+async def hello():
     """
     A function to handle requests to the /hello endpoint, returning a simple message.
     """
