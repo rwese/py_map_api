@@ -109,3 +109,25 @@ jobs:
           token: ${{ secrets.IMAGE_UPDATER_ACTION_TOKEN }}
           value: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
           commitChange: true
+
+      - name: Checkout Target Repository
+        uses: actions/checkout@v3
+        with:
+          repository: owner/target-repository
+          path: infrastructure
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update Image Version in the related HelmChart values.yaml
+        uses: opsverse/image-updater-action@latest
+        with:
+          valueFile: 'deployment/helm/values.yaml'
+          propertyPath: 'backend.version'
+          value: ${{ steps.image.outputs.version }}
+          repository: owner/target-repository
+          branch: deployment/${{ steps.image.outputs.version }}
+          targetBranch: development
+          createPR: true
+          message: 'Update Image Version to ${{ steps.image.outputs.version }}'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          workDir: infrastructure
+

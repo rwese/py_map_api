@@ -1,8 +1,29 @@
-from fastapi import FastAPI, Depends
-from app.model import PositionsRequest, PositionsResponse
+from app.model import LocationsResponse, LocationsRequest
 from app.client import get_pos_by_names
 
-app = FastAPI()
+from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
+
+
+def create_app():
+    app = FastAPI(
+        title="My Python Map Api",
+        description="My Python Map Api Gateway to OpenStreetMap via Nominatim",
+        version="1.0.0",
+    )
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["GET", "POST", "PUT", "DELETE"],
+        allow_headers=["*"],
+    )
+
+    return app
+
+
+app = create_app()
+
 
 @app.get("/hello")
 async def read_root():
@@ -11,33 +32,31 @@ async def read_root():
     """
     return {"message": "Hello, World"}
 
-@app.get("/pos", response_model=PositionsResponse)
-def get_pos(poisRequest: PositionsRequest = Depends()):
+
+@app.get("/search_locations", response_model=LocationsResponse)
+def get_pos(locationsRequest: LocationsRequest = Depends()):
     """
-    Get positions by names, comma separated and return a json of found location names, longitude, and latitude.
+    Get locations by names, comma separated and return a json of found location names, longitude, and latitude.
     """
-    pois = poisRequest.pois.split(",")
-    pois = [poi.strip() for poi in pois]
-    results = get_pos_by_names(pois)
+    locations = locationsRequest.locations.split(",")
+    locations = [location.strip() for location in locations]
+    results = get_pos_by_names(locations)
     responses = {}
-    for name in pois:
+    for name in locations:
         result = results.get(name)
         if result:
             responses[name] = {
-                "display_name": result['display_name'],
-                "lon": result['lon'],
-                "lat": result['lat']
+                "display_name": result["display_name"],
+                "lon": result["lon"],
+                "lat": result["lat"],
+                "found": True,
             }
         else:
             responses[name] = {
                 "display_name": "Not found",
-                "lon": '0',
-                "lat": '0'
+                "lon": "0",
+                "lat": "0",
+                "found": False,
             }
 
-
-    return {
-        "positions": responses
-    }
-
-
+    return {"positions": responses}

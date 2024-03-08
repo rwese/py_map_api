@@ -2,9 +2,12 @@ import argparse
 
 from app.client import *
 
+
 def main():
-    parser = argparse.ArgumentParser(description='CLI tool for interacting with the API')
-    parser.add_argument('--query', type=str, help='Query string for the API')
+    parser = argparse.ArgumentParser(
+        description="CLI tool for interacting with the API"
+    )
+    parser.add_argument("--query", type=str, help="Query string for the API")
     args = parser.parse_args()
 
     if args.query:
@@ -14,5 +17,6 @@ def main():
     else:
         parser.print_help()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
