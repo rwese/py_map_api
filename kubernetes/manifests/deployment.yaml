@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: py-map-api
-          image: ghcr.io/rwese/py_map_api@sha256:30b4b8f2e590ce6b8becc108397285851cce33cdc2e83d4d2c48343b54da89db
+          image: ghcr.io/rwese/py_map_api@sha256:a56597ab2397b76f14a2c2d45d0655b889cad324a2ee20fc5ac864ca07a54692
           ports:
             - containerPort: 8000
           readinessProbe:
