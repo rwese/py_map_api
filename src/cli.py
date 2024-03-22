@@ -1,6 +1,6 @@
 import argparse
-
-from app.client import *
+import json
+from app.api import create_app
 
 
 def main():
@@ -10,10 +10,13 @@ def main():
     parser.add_argument("--query", type=str, help="Query string for the API")
     args = parser.parse_args()
 
+    app = create_app()
+    client = app.client
     if args.query:
         pos_list = args.query.split(";")
-        response = get_pos_by_names(pos_list)
-        print(response)
+        response = client.get_pos_by_names(pos_list)
+        json_response = json.dumps(response)
+        print(json_response)
     else:
         parser.print_help()
 

@@ -1,5 +1,5 @@
 from app.model import LocationsResponse, LocationsRequest
-from app.client import get_pos_by_names
+from app.client import Client
 
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
@@ -40,7 +40,7 @@ def get_pos(locationsRequest: LocationsRequest = Depends()):
     """
     locations = locationsRequest.locations.split(",")
     locations = [location.strip() for location in locations]
-    results = get_pos_by_names(locations)
+    results = Client().get_pos_by_names(names=locations)
     responses = {}
     for name in locations:
         result = results.get(name)

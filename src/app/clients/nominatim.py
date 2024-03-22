@@ -1,33 +1,41 @@
+from typing import Dict, List, Optional, Union
 from geopy.geocoders import Nominatim
 
 
-def client():
-    """
-    Create a Nominatim geocoding client.
+class NominatimClient:
+    """Wrapper around GeoPy's Nominatim geocoder."""
 
-    Returns:
-        Nominatim: A Nominatim geocoding client.
-    """
-    return Nominatim(user_agent="PyMapApi for CLI", timeout=10)
+    def __init__(self, user_agent: str = "PyMapApi for CLI", timeout: int = 10):
+        """Create a Nominatim geocoding client."""
+        self.client = Nominatim(user_agent=user_agent, timeout=timeout)
 
+    def get_pos_by_names(
+        self, names: List[str]
+    ) -> Dict[str, Dict[str, Union[str, bool]]]:
+        """Get the position by names using Nominatim geocoding service."""
+        responses = {}
+        for name in names:
+            response = self.get_pos_by_name(name)
+            if response:
+                responses[name] = response
+            else:
+                responses[name] = {
+                    "display_name": "Not found",
+                    "lon": "0",
+                    "lat": "0",
+                    "found": False,
+                }
 
-def get_pos_by_names(names: list):
-    """
-    Get the position by names using Nominatim geocoding service.
+        return responses
 
-    Args:
-        names (list): A list of names for which to retrieve positions.
-
-    Returns:
-        dict: A dictionary containing the responses for each name.
-    """
-    responses = {}
-    for name in names:
-        query = name
-        response = client().geocode(query)
+    def get_pos_by_name(self, name: str) -> Optional[Dict[str, Union[str, bool]]]:
+        """Get the position by name using Nominatim geocoding service."""
+        response = self.client.geocode(name)
         if response:
-            responses[name] = response.raw
-        else:
-            continue
-
-    return responses
+            return {
+                "display_name": response.raw["display_name"],
+                "lon": response.raw["lon"],
+                "lat": response.raw["lat"],
+                "found": True,
+            }
+        return None
