@@ -15,4 +15,7 @@ ENV FORWARDED_ALLOW_IPS="10.*,172.16.*,192.168.*"
 
 CMD ["python", "/app/src/main.py"]
 
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+    CMD curl --head --request GET http://localhost:8000/docs |& grep "200 OK" > /dev/null || exit 1
+
 EXPOSE 8000/TCP
