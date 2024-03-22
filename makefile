@@ -7,13 +7,6 @@ PYTHON := python3.12
 SRC_FILES := $(shell find src/ -type f)
 DOCKER_IMAGE_MARKER := .docker_image_built
 
-setup:
-	$(PYTHON) -m venv $(VENV)
-	$(VENV)/bin/pip install -r requirements.txt
-
-activate:
-	@echo "To activate the virtual environment, execute 'source $(VENV)/bin/activate'"
-
 # Define the usage output
 .PHONY: help
 help:
@@ -30,6 +23,14 @@ help:
 # Define the default target
 .PHONY: all
 all: help
+
+setup:
+	$(PYTHON) -m venv $(VENV)
+	$(VENV)/bin/pip install -r requirements.txt
+
+activate:
+	@echo "To activate the virtual environment, execute 'source $(VENV)/bin/activate'"
+
 
 $(DOCKER_IMAGE_MARKER): $(SRC_FILES) docker/Dockerfile
 	docker build -t $(IMAGE_NAME):$(IMAGE_TAG) -f docker/Dockerfile .
