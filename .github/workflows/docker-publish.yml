@@ -16,7 +16,7 @@ jobs:
 
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
       id-token: write
 
@@ -87,15 +87,13 @@ jobs:
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
 
       - name: Dump image digest version
-        uses: OpsVerseIO/image-updater-action@0.1.0
         if: ${{ github.event_name != 'pull_request' && github.ref == 'refs/heads/main' }}
-        with:
-          message: '[skip ci] bump manifest image'
-          targetBranch: main
-          branch: main
-          masterBranchName: main
-          valueFile: 'kubernetes/manifests/deployment.yaml'
-          propertyPath: 'spec.template.spec.containers[0].image'
-          token: ${{ secrets.IMAGE_UPDATER_ACTION_TOKEN }}
-          value: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}@${{ steps.build-and-push.outputs.digest }}
-          commitChange: true
+        env:
+          IMAGE: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          DIGEST: ${{ steps.build-and-push.outputs.digest }}
+        run: |
+          sed -i "s#image: ${IMAGE}@.*#image: ${IMAGE}@${DIGEST}#" kubernetes/manifests/deployment.yaml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "[skip ci] bump manifest image"
+          git push
